@@ -12,6 +12,8 @@ from iris_mnemosia_backend.routes import status
 async def lifespan(app: FastAPI):
     # TODO: log startup
     settings = Settings()
+    # TODO : log model validation
+    Settings.model_validate(settings)
     app.state.database = Database(database_path=settings.database_path, logger="")
     yield
     # Closes the current connection pool
@@ -20,8 +22,3 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 app.include_router(status.router)
-
-
-@app.get("/status")
-def status():
-    return {"status": "up"}

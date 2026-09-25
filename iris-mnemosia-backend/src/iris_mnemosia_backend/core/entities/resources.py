@@ -2,7 +2,6 @@ from datetime import datetime, timezone
 from uuid import UUID, uuid7
 
 from iris_mnemosia_backend.infrastructure.database import DatabaseModel
-from sqlalchemy import Text
 from sqlalchemy.orm import Mapped, mapped_column
 
 

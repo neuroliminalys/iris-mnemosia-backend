@@ -12,5 +12,5 @@ To upgrade database : ```poetry run alembic revision --autogenerate -m "initial"
 
 ## Endpoints
 
-- `/api/status` : returns `{"status": "ok"}` if the API is working
-- /api/database-status : returns `{"status": "ok"}` if the database is working
+- `/status/api` : returns `{"status": "ok"}` if the API is working
+- `/status/database` : returns `{"status": "ok"}` if the database is working
