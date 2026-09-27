@@ -15,8 +15,10 @@ class Database:
     engine: Engine
     New_session: sessionmaker[Session]
 
-    def __init__(self, database_path: str, logger: Logger):
-        self.logger = logger
+    def __init__(self, database_path: str
+        # , logger: Logger
+    ):
+        # self.logger = logger
         self.engine = create_engine(database_path)
         self.New_session = sessionmaker(bind=self.engine)
 
