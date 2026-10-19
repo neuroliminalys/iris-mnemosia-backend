@@ -3,9 +3,9 @@ from uuid import UUID
 from pydantic import BaseModel
 
 
-class userInput(BaseModel):
+class UserInput(BaseModel):
     name: str
 
-class userOutput(BaseModel):
+class UserOutput(BaseModel):
     id: UUID
     name: str

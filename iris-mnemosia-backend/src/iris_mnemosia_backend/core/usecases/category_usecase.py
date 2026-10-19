@@ -1,14 +1,23 @@
-from http.client import NO_CONTENT, NOT_FOUND
+import logging
 from uuid import UUID
 
-from fastapi import HTTPException
-from fastapi.responses import JSONResponse
+from sqlalchemy.exc import IntegrityError
 
 from iris_mnemosia_backend.application.dto.category_dto import (
     CategoryInput,
-    CategoryOutput,
 )
 from iris_mnemosia_backend.application.services.category_service import CategoryService
+from iris_mnemosia_backend.core.exceptions.category.category_already_exists import (
+    CategoryAlreadyExists,
+)
+from iris_mnemosia_backend.core.exceptions.category.category_not_found import (
+    CategoryNotFound,
+)
+from iris_mnemosia_backend.core.exceptions.category.invalid_category_name import (
+    InvalidCategoryName,
+)
+
+logger = logging.getLogger(__name__)
 
 
 class CategoryUsecases:
@@ -17,47 +26,38 @@ class CategoryUsecases:
     def __init__(self, service: CategoryService) -> None:
         self.service = service
 
-    def create(self, newCategory: CategoryInput) -> JSONResponse | None:
+    def create(self, newCategory: CategoryInput) -> dict | None:
         try:
-            resp = self.service.create(newCategory)
-            self.service.repository.session.commit()
-            return JSONResponse(resp.model_dump(mode="json"))
-        except Exception:
-            self.service.repository.session.rollback()
-            # TODO: log e
-            raise
+            if newCategory.name.strip():
+                resp = self.service.create(newCategory)
+                return resp.model_dump(mode="json")
+            raise InvalidCategoryName()
+        except IntegrityError as e:
+            # The second word of the casted error is the constraint name
+            if str(e).strip().split(" ")[1] == "UNIQUE":
+                raise CategoryAlreadyExists()
 
-    def read_all(self) -> JSONResponse:
+    def read_all(self) -> list[dict]:
         categories = self.service.read_all()
-        return JSONResponse(
-            content=[category.model_dump(mode="json") for category in categories]
-        )
+        return [category.model_dump(mode="json") for category in categories]
 
-    def read_by_id(self, id: UUID) -> JSONResponse | HTTPException:
+    def read_by_id(self, id: UUID) -> dict | None:
         resp = self.service.read_by_id(id)
         if resp:
-            return JSONResponse(resp.model_dump(mode="json"))
-        raise HTTPException(status_code=NOT_FOUND)
+            return resp.model_dump(mode="json")
+        raise CategoryNotFound()
 
-    def update(self, updatedCategory: CategoryOutput) -> (
-        JSONResponse | HTTPException
-    ) | None:
+    def update(self, id: UUID, updatedCategory: CategoryInput) -> dict | None:
         try:
-            resp = self.service.update(updatedCategory)
+            resp = self.service.update(id, updatedCategory)
             if resp:
-                self.service.repository.session.commit()
-                return JSONResponse(resp.model_dump(mode="json"))
-            self.service.repository.session.rollback()
-            raise HTTPException(status_code=NOT_FOUND)
-        except Exception:
-            self.service.repository.session.rollback()
-            # TODO: log e
+                return resp.model_dump(mode="json")
+            raise CategoryNotFound()
+        except Exception as e:
+            logger.exception(str(e))
             raise
 
-    def delete(self, id: UUID) -> HTTPException:
+    def delete(self, id: UUID) -> None:
         resp = self.service.delete(id)
-        if resp == True:
-            self.service.repository.session.commit()
-            raise HTTPException(status_code=NO_CONTENT)
-        self.service.repository.session.rollback()
-        raise HTTPException(status_code=NOT_FOUND)
+        if resp == False:
+            raise CategoryNotFound()

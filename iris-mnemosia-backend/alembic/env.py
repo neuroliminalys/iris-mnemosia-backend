@@ -1,13 +1,14 @@
 from logging.config import fileConfig
 
-from alembic import context
-from iris_mnemosia_backend.infrastructure.database import DatabaseModel
 from sqlalchemy import engine_from_config, pool
+
+from alembic import context
+from iris_mnemosia_backend.core.config.database import DatabaseModel
 from src.iris_mnemosia_backend.core.config.config import Settings
-from src.iris_mnemosia_backend.core.entities import (
-    categories,  # noqa: F401
-    resources,  # noqa: F401
-    tags,  # noqa: F401
+from src.iris_mnemosia_backend.core.models import (
+    categories_entity,  # noqa: F401
+    resources_entity,  # noqa: F401
+    tag_entity,  # noqa: F401
     users,  # noqa: F401
 )
 

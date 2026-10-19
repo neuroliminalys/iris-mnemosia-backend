@@ -4,7 +4,7 @@ from iris_mnemosia_backend.application.dto.category_dto import (
     CategoryInput,
     CategoryOutput,
 )
-from iris_mnemosia_backend.core.models.categories import Category
+from iris_mnemosia_backend.core.models.categories_entity import CategoryEntity
 from iris_mnemosia_backend.infrastructure.repositories.categories_repository import (
     CategoryRepository,
 )
@@ -31,11 +31,11 @@ class CategoryService:
 
     def create(self, newCategory: CategoryInput) -> CategoryOutput:
         # ** is used to unpack the the dictonary (instead of doing : title=example.title, etc)
-        category = self.repository.insert(Category(**newCategory.model_dump()))
+        category = self.repository.insert(CategoryEntity(**newCategory.model_dump()))
         return CategoryOutput.model_validate(category)
 
-    def update(self, updatedCategory: CategoryOutput) -> CategoryOutput | None:
-        searched = self.repository.select_by_id(updatedCategory.id)
+    def update(self, id: UUID, updatedCategory: CategoryInput) -> CategoryOutput | None:
+        searched = self.repository.select_by_id(id)
         if searched:
             searched.name = updatedCategory.name
             return CategoryOutput.model_validate(searched)

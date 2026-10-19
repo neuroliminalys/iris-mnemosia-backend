@@ -2,7 +2,9 @@ from uuid import UUID
 
 from fastapi import APIRouter
 
-from iris_mnemosia_backend.application.dto.category_dto import CategoryInput, CategoryOutput
+from iris_mnemosia_backend.application.dto.category_dto import (
+    CategoryInput,
+)
 from iris_mnemosia_backend.core.dependencies.category_dependencies import (
     CategoryUsecasesDep,
 )
@@ -10,7 +12,7 @@ from iris_mnemosia_backend.core.dependencies.category_dependencies import (
 router = APIRouter(prefix="/categories", tags=["categories"])
 
 
-@router.post("")
+@router.post("", status_code=201)
 def create(
     newCategory: CategoryInput,
     usecases: CategoryUsecasesDep,
@@ -28,14 +30,15 @@ def get_by_id(id: UUID, usecases: CategoryUsecasesDep):
     return usecases.read_by_id(id)
 
 
-@router.put("/edit")
+@router.put("/{id}")
 def edit(
-    editCategory: CategoryOutput,
+    id: UUID,
+    editCategory: CategoryInput,
     usecases: CategoryUsecasesDep,
 ):
-    return usecases.update(editCategory)
+    return usecases.update(id, editCategory)
 
 
-@router.delete("/delete/{id}")
+@router.delete("/{id}", status_code=204)
 def delete(id: UUID, usecases: CategoryUsecasesDep):
     return usecases.delete(id)

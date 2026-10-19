@@ -4,8 +4,8 @@ from fastapi import Depends
 from sqlalchemy.orm import Session
 
 from iris_mnemosia_backend.application.services.category_service import CategoryService
+from iris_mnemosia_backend.core.config.database import open_new_session
 from iris_mnemosia_backend.core.usecases.category_usecase import CategoryUsecases
-from iris_mnemosia_backend.infrastructure.database import open_new_session
 from iris_mnemosia_backend.infrastructure.repositories.categories_repository import (
     CategoryRepository,
 )

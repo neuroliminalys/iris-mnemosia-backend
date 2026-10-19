@@ -4,12 +4,12 @@ from uuid import UUID
 from pydantic import BaseModel
 
 
-class resourceInput(BaseModel):
+class ResourceInput(BaseModel):
     title: str
-    description: str
+    description: str | None = None
     content: str
 
-class resourceOutput(BaseModel):
+class ResourceOutput(BaseModel):
     id: UUID
     title: str
     description: str
