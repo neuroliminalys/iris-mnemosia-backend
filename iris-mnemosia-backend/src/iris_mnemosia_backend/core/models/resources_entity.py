@@ -33,7 +33,7 @@ class ResourceEntity(DatabaseModel):
     )
 
     category_id: Mapped[UUID | None] = mapped_column(ForeignKey("categories.id"), nullable=True)
-    category: Mapped["CategoryEntity"] = relationship(back_populates="resources")
+    category: Mapped["CategoryEntity | None"] = relationship(back_populates="resources")
 
     tag_association: Mapped[list["ResourceTagsAssociation"]] = relationship(
         back_populates="resource"

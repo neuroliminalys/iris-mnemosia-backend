@@ -1,6 +1,8 @@
 import logging
 from uuid import UUID
 
+from fastapi._compat.v2 import ValidationError
+
 from iris_mnemosia_backend.application.dto.resource_dto import (
     ResourceInput,
     ResourceOutput,
@@ -12,11 +14,14 @@ from iris_mnemosia_backend.infrastructure.repositories.resource_repository impor
 
 logger = logging.getLogger(__name__)
 
+
 class ResourceService:
     repository: ResourceRepository
 
     def __init__(self, repository: ResourceRepository) -> None:
-        logger.info(f"New instance of {__name__} with SERVICE-{id(self)} and REPOSITORY-{id(repository)}")
+        logger.info(
+            f"New instance of {__name__} with SERVICE-{id(self)} and REPOSITORY-{id(repository)}"
+        )
         self.repository = repository
 
     def read_by_id(self, target_id: UUID) -> ResourceOutput | None:
@@ -41,7 +46,10 @@ class ResourceService:
         logger.info(f"SERVICE-{id(self)} : Update {target_id}")
         found = self.repository.select_by_id(target_id)
         if found:
-            found.name = updated.name
+            for attr, value in updated.model_dump():
+                setattr(found, attr, value)
+
+            self.repository.session.flush()
             return ResourceOutput.model_validate(found)
         return None
 
