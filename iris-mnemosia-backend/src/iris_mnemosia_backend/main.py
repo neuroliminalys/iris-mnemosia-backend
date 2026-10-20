@@ -12,7 +12,7 @@ from iris_mnemosia_backend.core.config.config import Settings
 from iris_mnemosia_backend.core.config.database import Database
 from iris_mnemosia_backend.core.config.logger_config import logger_config
 from iris_mnemosia_backend.core.exceptions.business_exception import BusinessException
-from iris_mnemosia_backend.routes import categories, status
+from iris_mnemosia_backend.routes import categories, resources, status
 
 logger = logging.getLogger(__name__)
 
@@ -37,5 +37,6 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 app.include_router(status.router)
 app.include_router(categories.router)
+app.include_router(resources.router)
 
 app.add_exception_handler(BusinessException, business_exception_handler)
