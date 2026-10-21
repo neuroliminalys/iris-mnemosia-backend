@@ -15,7 +15,7 @@ from iris_mnemosia_backend.core.config.config import Settings
 from iris_mnemosia_backend.core.config.database import Database
 from iris_mnemosia_backend.core.config.logger_config import logger_config
 from iris_mnemosia_backend.core.exceptions.business_exception import BusinessException
-from iris_mnemosia_backend.routes import categories, resources, status
+from iris_mnemosia_backend.routes import categories, resources, status, tags
 
 logger = logging.getLogger(__name__)
 
@@ -41,6 +41,7 @@ app = FastAPI(lifespan=lifespan)
 app.include_router(status.router)
 app.include_router(categories.router)
 app.include_router(resources.router)
+app.include_router(tags.router)
 
 app.add_exception_handler(BusinessException, business_exception_handler)
 
