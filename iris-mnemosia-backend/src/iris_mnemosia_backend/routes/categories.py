@@ -5,7 +5,7 @@ from fastapi import APIRouter
 from iris_mnemosia_backend.application.dto.category_dto import (
     CategoryInput,
 )
-from iris_mnemosia_backend.core.dependencies.category_dependencies import (
+from iris_mnemosia_backend.core.dependencies.categories_dependencies import (
     CategoryUsecasesDep,
 )
 

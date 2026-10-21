@@ -4,7 +4,9 @@ from uuid import UUID
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from iris_mnemosia_backend.core.models.categories_entity import CategoryEntity
+from iris_mnemosia_backend.core.models.entities.categories_entity import (
+    CategoryEntity,
+)
 
 
 class CategoryRepository:

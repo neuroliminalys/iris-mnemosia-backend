@@ -6,7 +6,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from iris_mnemosia_backend.core.config.database import DatabaseModel
 
 if typing.TYPE_CHECKING:
-    from iris_mnemosia_backend.core.models.associations.resource_tags_association import (
+    from iris_mnemosia_backend.core.models.entities.associations.resource_tags_association import (
         ResourceTagsAssociation,
     )
 

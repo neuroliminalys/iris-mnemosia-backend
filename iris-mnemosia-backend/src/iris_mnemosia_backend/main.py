@@ -4,7 +4,6 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from sqlalchemy.orm.mapper import configure_mappers
 
-import iris_mnemosia_backend.core.models  # noqa: F401
 from iris_mnemosia_backend.core.config.business_exception_handler import (
     business_exception_handler,
 )

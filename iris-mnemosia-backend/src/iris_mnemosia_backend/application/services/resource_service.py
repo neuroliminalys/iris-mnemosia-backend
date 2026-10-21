@@ -1,8 +1,6 @@
 import logging
 from uuid import UUID
 
-from fastapi._compat.v2 import ValidationError
-
 from iris_mnemosia_backend.application.dto.resource_dto import (
     ResourceInput,
     ResourceOutput,

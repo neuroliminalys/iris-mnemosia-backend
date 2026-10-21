@@ -8,10 +8,12 @@ from sqlalchemy.schema import ForeignKey
 from iris_mnemosia_backend.core.config.database import DatabaseModel
 
 if typing.TYPE_CHECKING:
-    from iris_mnemosia_backend.core.models.associations.resource_tags_association import (
+    from iris_mnemosia_backend.core.models.entities.associations.resource_tags_association import (
         ResourceTagsAssociation,
     )
-    from iris_mnemosia_backend.core.models.categories_entity import CategoryEntity
+    from iris_mnemosia_backend.core.models.entities.categories_entity import (
+        CategoryEntity,
+    )
 
 
 class ResourceEntity(DatabaseModel):
@@ -32,7 +34,9 @@ class ResourceEntity(DatabaseModel):
         nullable=False,
     )
 
-    category_id: Mapped[UUID | None] = mapped_column(ForeignKey("categories.id"), nullable=True)
+    category_id: Mapped[UUID | None] = mapped_column(
+        ForeignKey("categories.id"), nullable=True
+    )
     category: Mapped["CategoryEntity | None"] = relationship(back_populates="resources")
 
     tag_association: Mapped[list["ResourceTagsAssociation"]] = relationship(

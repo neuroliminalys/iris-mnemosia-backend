@@ -4,7 +4,9 @@ from iris_mnemosia_backend.application.dto.category_dto import (
     CategoryInput,
     CategoryOutput,
 )
-from iris_mnemosia_backend.core.models.categories_entity import CategoryEntity
+from iris_mnemosia_backend.core.models.entities.categories_entity import (
+    CategoryEntity,
+)
 from iris_mnemosia_backend.infrastructure.repositories.categories_repository import (
     CategoryRepository,
 )

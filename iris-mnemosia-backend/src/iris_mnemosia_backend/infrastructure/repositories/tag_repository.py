@@ -5,7 +5,7 @@ from uuid import UUID
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from iris_mnemosia_backend.core.models.tag_entity import TagEntity
+from iris_mnemosia_backend.core.models.entities.tag_entity import TagEntity
 
 logger = logging.getLogger(__name__)
 
