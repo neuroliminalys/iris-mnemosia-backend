@@ -4,6 +4,10 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from sqlalchemy.orm.mapper import configure_mappers
 
+from iris_mnemosia_backend.application.middlewares.http_process_time import (
+    http_process_time,
+)
+from iris_mnemosia_backend.application.middlewares.request_logger import request_logger
 from iris_mnemosia_backend.core.config.business_exception_handler import (
     business_exception_handler,
 )
@@ -39,3 +43,6 @@ app.include_router(categories.router)
 app.include_router(resources.router)
 
 app.add_exception_handler(BusinessException, business_exception_handler)
+
+app.middleware("http")(http_process_time)
+app.middleware("http")(request_logger)

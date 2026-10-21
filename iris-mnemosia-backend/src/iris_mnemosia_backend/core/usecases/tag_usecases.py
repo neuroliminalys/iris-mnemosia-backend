@@ -20,7 +20,6 @@ class TagUsecases:
     service: TagService
 
     def __init__(self, service: TagService) -> None:
-        logger.info(f"New instance of {__name__} (USECASES-{id(self)}) linked to SERVICE-{id(service)}")
         self.service = service
 
     def create(self, data: TagInput) -> dict | None:
