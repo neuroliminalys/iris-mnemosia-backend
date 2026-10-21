@@ -1,6 +1,5 @@
 import logging
 from collections.abc import Iterator
-from logging import Logger
 
 from fastapi import Request
 from sqlalchemy import Engine, create_engine
@@ -23,7 +22,6 @@ class DatabaseModel(DeclarativeBase):
 
 
 class Database:
-    logger: Logger
     engine: Engine
     New_session: sessionmaker[Session]
 

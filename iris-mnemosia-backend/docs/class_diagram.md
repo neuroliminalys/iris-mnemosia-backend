@@ -61,3 +61,5 @@ class ResourceOutput {
     -Datetime updatedAt
 }
 ```
+
+# Logging model
