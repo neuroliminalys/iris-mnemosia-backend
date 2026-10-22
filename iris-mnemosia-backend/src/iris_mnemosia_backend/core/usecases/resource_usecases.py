@@ -22,7 +22,6 @@ class ResourcesUsecases:
     service: ResourceService
 
     def __init__(self, service: ResourceService) -> None:
-        logger.info(f"New instance of {__name__} (USECASES-{id(self)}) linked to SERVICE-{id(service)}")
         self.service = service
 
     def create(self, data: ResourceInput) -> dict | None:

@@ -4,6 +4,10 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from sqlalchemy.orm.mapper import configure_mappers
 
+from iris_mnemosia_backend.application.middlewares.http_process_time import (
+    http_process_time,
+)
+from iris_mnemosia_backend.application.middlewares.request_logger import request_logger
 from iris_mnemosia_backend.core.config.business_exception_handler import (
     business_exception_handler,
 )
@@ -11,7 +15,7 @@ from iris_mnemosia_backend.core.config.config import Settings
 from iris_mnemosia_backend.core.config.database import Database
 from iris_mnemosia_backend.core.config.logger_config import logger_config
 from iris_mnemosia_backend.core.exceptions.business_exception import BusinessException
-from iris_mnemosia_backend.routes import categories, resources, status
+from iris_mnemosia_backend.routes import categories, resources, status, tags
 
 logger = logging.getLogger(__name__)
 
@@ -37,5 +41,9 @@ app = FastAPI(lifespan=lifespan)
 app.include_router(status.router)
 app.include_router(categories.router)
 app.include_router(resources.router)
+app.include_router(tags.router)
 
 app.add_exception_handler(BusinessException, business_exception_handler)
+
+app.middleware("http")(http_process_time)
+app.middleware("http")(request_logger)

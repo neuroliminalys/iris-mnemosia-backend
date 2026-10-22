@@ -7,9 +7,9 @@ from iris_mnemosia_backend.core.exceptions.business_exception import BusinessExc
 
 logger = logging.getLogger(__name__)
 
+
 def business_exception_handler(request: Request, exception: BusinessException):
-    logger.debug(exception.message)
+    request.state.message = exception.message
     return JSONResponse(
-        status_code=exception.status_code,
-        content={"message": exception.message}
+        status_code=exception.status_code, content={"message": exception.message}
     )
