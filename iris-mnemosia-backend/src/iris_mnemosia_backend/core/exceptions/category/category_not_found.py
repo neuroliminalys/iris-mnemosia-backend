@@ -5,4 +5,4 @@ from iris_mnemosia_backend.core.exceptions.business_exception import BusinessExc
 
 class CategoryNotFound(BusinessException):
     def __init__(self) -> None:
-        super().__init__("Category not found", NOT_FOUND)
+        super().__init__( "Category not found", NOT_FOUND)

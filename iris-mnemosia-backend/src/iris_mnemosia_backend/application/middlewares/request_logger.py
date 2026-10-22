@@ -7,20 +7,30 @@ logger = logging.getLogger(__name__)
 
 
 async def request_logger(request: Request, call_next) -> Response:
+    # DO NOT OVERRIDE THESE VALUES
+    host: str
+    route: str
+    http_verb: str
+
+    # These are overwritable
     account: UUID | str
 
-    host: str = request.client.host if request.client else "unknown"
-
-    try:
-        foundAccount = request.state.account
-        account = foundAccount
-    except AttributeError:
-        account = "Not authenticated"
-
-    http_verb: str = request.method
-    route: str = request.url.path
-
-    logger.info(f"{host} | {account} | {http_verb} | {route}")
+    request.state.account = None
+    request.state.message = None
 
     resp = await call_next(request)
+
+    if request.client:
+        host = request.client.host
+        port = request.client.port
+    else:
+        host = "unknown"
+        port = None
+
+    account = "User id : " + request.state.account if request.state.account else "Not authenticated"
+    http_verb = request.method
+    route = request.url.path
+
+    logger.info(f"{host}:{port} | ({account}) : {http_verb} {route} | CODE HTTP : {resp.status_code} --> {request.state.message}")
+
     return resp
