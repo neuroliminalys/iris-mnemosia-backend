@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from pydantic.config import ConfigDict
 from pydantic.fields import Field
 
+from iris_mnemosia_backend.application.dto.category_dto import CategoryOutput
 from iris_mnemosia_backend.application.dto.tag_dto import TagOutput
 
 
@@ -22,7 +23,7 @@ class ResourceOutput(BaseModel):
     content: str
     created_at: datetime
     updated_at: datetime
-    category_id: UUID | None = Field(
+    category: CategoryOutput | None = Field(
         default=None, exclude_if=lambda value: value is None
     )
     tag_association: list[TagOutput] = Field(

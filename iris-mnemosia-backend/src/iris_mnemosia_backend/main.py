@@ -2,6 +2,7 @@ import logging
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm.mapper import configure_mappers
 
 from iris_mnemosia_backend.application.middlewares.http_process_time import (
@@ -19,7 +20,9 @@ from iris_mnemosia_backend.routes import categories, resources, status, tags
 
 logger = logging.getLogger(__name__)
 
+settings = Settings()
 
+settings: Settings
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Settings are already validated by Settings()
@@ -47,3 +50,9 @@ app.add_exception_handler(BusinessException, business_exception_handler)
 
 app.middleware("http")(http_process_time)
 app.middleware("http")(request_logger)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.cors_allowed_origins,
+    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE"],
+    allow_headers=["Authorization", "Content-Type"],
+)
